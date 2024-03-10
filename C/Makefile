@@ -20,6 +20,6 @@ clean:
 				/bin/rm -f Colleen.o Grace.o Sully.o
 
 fclean: clean
-	      /bin/rm -f Colleen Grace Sully
+	      /bin/rm -f Colleen Grace Grace_kid.c Sully Sully_*
 
 re:     fclean all
