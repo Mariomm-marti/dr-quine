@@ -53,7 +53,7 @@ printf(str, 0x22, str, 0x22);
 
 Will produce as output:
 ```c
-char *str = "char *str = %c%s%c";
+char *str = "char *str = %c%s%c;";
 ```
 
 ## How to test them
