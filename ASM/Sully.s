@@ -5,7 +5,7 @@ tmpptr: resq    1
 i:      dd      5
 
         section .rodata
-quine:  db      "        section .bss%3$ctmpptr: resq    1%3$c%3$c        section .data%3$ci:      dd      %2$d%3$c%3$c        section .rodata%3$cquine:  db      %4$c%1$s%4$c, 0%3$cfilefmt:db      %4$cSully_%%d.s%4$c, 0%3$ccompfmt:db      %4$cnasm -f elf64 -D DECREASE Sully_%%1$d.s ; cc -Wall -Werror -Wextra -Wpedantic -z noexecstack Sully_%%1$d.o -o Sully_%%1$d ; ./Sully_%%1$d%4$c, 0%3$c%3$c        section .text%3$c%3$c        global main%3$c        default rel%3$c        extern free%3$c        extern asprintf%3$c        extern dprintf%3$c        extern system%3$c%3$cmain:%3$c        ; Setup stack%3$c        push    rbp%3$c        mov     rbp, rsp%3$c%3$c        ; Check what value 'i' will have during this execution%3$c        lea     rdi, [rel i]%3$c%%ifdef  DECREASE%3$c        dec     dword [rdi]%3$c%%endif%3$c        cmp     dword [rdi], 0%3$c        jl      finish%3$c%3$c        ; Format the string with the file name%3$c        lea     rdi, [rel tmpptr]%3$c        lea     rsi, [rel filefmt]%3$c        mov     rdx, [rel i]%3$c        call    asprintf wrt ..plt%3$c        cmp     rax, 0%3$c        jl      finish%3$c%3$c        ; Open the new file%3$c        mov     rax, 0x2%3$c        mov     rdi, [rel tmpptr]%3$c        mov     rsi, 0x241 ; O_WRONLY | O_TRUNC | O_CREAT%3$c        mov     rdx, 0q644%3$c        syscall%3$c        cmp     eax, 0%3$c        jl      finish%3$c        push    rax%3$c%3$c        ; Free the file name format%3$c        mov     rdi, [rel tmpptr]%3$c        call    free wrt ..plt%3$c        cmp     rax, 0%3$c        jl      finish%3$c%3$c        ; Write the quine contents into tmpptr%3$c        ; Top of the stack has fd%3$c        mov     rdi, qword [rsp]%3$c        lea     rsi, [rel quine]%3$c        lea     rdx, [rel quine]%3$c        mov     rcx, [rel i]%3$c        mov     r8, 0x0a%3$c        mov     r9, 0x22%3$c        call    dprintf wrt ..plt%3$c        cmp     rax, 0%3$c        jl      finish%3$c%3$c        ; Close the file descriptor as its not longer needed%3$c        mov     rax, 0x3%3$c        pop     rdi%3$c        syscall%3$c        cmp     rax, 0%3$c        jl      finish%3$c%3$c        ; Format the compiling format string%3$c        lea     rdi, [rel tmpptr]%3$c        lea     rsi, [rel compfmt]%3$c        mov     rdx, [rel i]%3$c        call    asprintf wrt ..plt%3$c        cmp     rax, 0%3$c        jl      finish%3$c%3$c        ; Execute the next compiling and binary%3$c        mov     rdi, [rel tmpptr]%3$c        call    system wrt ..plt%3$c%3$c        ; Free the compiling format string%3$c        mov     rdi, [rel tmpptr]%3$c        call    free wrt ..plt%3$c%3$cfinish:%3$c        ; Return base pointer to previous function and discard stack%3$c        mov     rsp, rbp%3$c        pop     rbp%3$c        ret%3$c", 0
+quine:  db      "        section .bss%2$ctmpptr: resq    1%2$c%2$c        section .data%2$ci:      dd      %1$d%2$c%2$c        section .rodata%2$cquine:  db      %3$c%4$s%3$c, 0%2$cfilefmt:db      %3$cSully_%%d.s%3$c, 0%2$ccompfmt:db      %3$cnasm -f elf64 -D DECREASE Sully_%%1$d.s ; cc -Wall -Werror -Wextra -Wpedantic -z noexecstack Sully_%%1$d.o -o Sully_%%1$d ; ./Sully_%%1$d%3$c, 0%2$c%2$c        section .text%2$c%2$c        global main%2$c        default rel%2$c        extern free%2$c        extern asprintf%2$c        extern dprintf%2$c        extern system%2$c%2$cmain:%2$c        ; Setup stack%2$c        push    rbp%2$c        mov     rbp, rsp%2$c%2$c        ; Check what value 'i' will have during this execution%2$c        lea     rdi, [rel i]%2$c%%ifdef  DECREASE%2$c        dec     dword [rdi]%2$c%%endif%2$c        cmp     dword [rdi], 0%2$c        jl      finish%2$c%2$c        ; Format the string with the file name%2$c        lea     rdi, [rel tmpptr]%2$c        lea     rsi, [rel filefmt]%2$c        mov     rdx, [rel i]%2$c        call    asprintf wrt ..plt%2$c        cmp     rax, 0%2$c        jl      finish%2$c%2$c        ; Open the new file%2$c        mov     rax, 0x2%2$c        mov     rdi, [rel tmpptr]%2$c        mov     rsi, 0x241 ; O_WRONLY | O_TRUNC | O_CREAT%2$c        mov     rdx, 0q644%2$c        syscall%2$c        cmp     eax, 0%2$c        jl      finish%2$c        mov     r15d, eax%2$c%2$c        ; Free the file name format%2$c        mov     rdi, [rel tmpptr]%2$c        call    free wrt ..plt%2$c        cmp     rax, 0%2$c        jl      finish%2$c%2$c        ; Write the quine contents into tmpptr%2$c        ; Top of the stack has fd%2$c        mov     edi, r15d%2$c        lea     rsi, [rel quine]%2$c        mov     rdx, [rel i]%2$c        mov     rcx, 0x0a%2$c        mov     r8, 0x22%2$c        lea     r9, [rel quine]%2$c        call    dprintf wrt ..plt%2$c        cmp     rax, 0%2$c        jl      finish%2$c%2$c        ; Close the file descriptor as its not longer needed%2$c        mov     rax, 0x3%2$c        mov     edi, r15d%2$c        syscall%2$c        cmp     rax, 0%2$c        jl      finish%2$c%2$c        ; Format the compiling format string%2$c        lea     rdi, [rel tmpptr]%2$c        lea     rsi, [rel compfmt]%2$c        mov     rdx, [rel i]%2$c        call    asprintf wrt ..plt%2$c        cmp     rax, 0%2$c        jl      finish%2$c%2$c        ; Execute the next compiling and binary%2$c        mov     rdi, [rel tmpptr]%2$c        call    system wrt ..plt%2$c%2$c        ; Free the compiling format string%2$c        mov     rdi, [rel tmpptr]%2$c        call    free wrt ..plt%2$c%2$cfinish:%2$c        ; Return base pointer to previous function and discard stack%2$c        mov     rsp, rbp%2$c        pop     rbp%2$c        ret%2$c", 0
 filefmt:db      "Sully_%d.s", 0
 compfmt:db      "nasm -f elf64 -D DECREASE Sully_%1$d.s ; cc -Wall -Werror -Wextra -Wpedantic -z noexecstack Sully_%1$d.o -o Sully_%1$d ; ./Sully_%1$d", 0
 
@@ -47,7 +47,7 @@ main:
         syscall
         cmp     eax, 0
         jl      finish
-        push    rax
+        mov     r15d, eax
 
         ; Free the file name format
         mov     rdi, [rel tmpptr]
@@ -57,19 +57,19 @@ main:
 
         ; Write the quine contents into tmpptr
         ; Top of the stack has fd
-        mov     rdi, qword [rsp]
+        mov     edi, r15d
         lea     rsi, [rel quine]
-        lea     rdx, [rel quine]
-        mov     rcx, [rel i]
-        mov     r8, 0x0a
-        mov     r9, 0x22
+        mov     rdx, [rel i]
+        mov     rcx, 0x0a
+        mov     r8, 0x22
+        lea     r9, [rel quine]
         call    dprintf wrt ..plt
         cmp     rax, 0
         jl      finish
 
         ; Close the file descriptor as its not longer needed
         mov     rax, 0x3
-        pop     rdi
+        mov     edi, r15d
         syscall
         cmp     rax, 0
         jl      finish
